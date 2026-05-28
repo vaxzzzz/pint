@@ -49,24 +49,63 @@
 
     <script src="../../js/main.js"></script>
     <script>
+        console.log('✓ Página Login carregada');
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const senha = document.getElementById('loginSenha').value;
 
+            // Validações
             if (!validarEmail(email)) {
-                alert('E-mail inválido!');
+                alert('❌ E-mail inválido!');
                 return;
             }
 
             if (!validarSenha(senha)) {
-                alert('Senha deve ter no mínimo 6 caracteres!');
+                alert('❌ Senha deve ter no mínimo 6 caracteres!');
                 return;
             }
 
-            alert('Login realizado com sucesso! (Função integrada com backend pendente)');
-            // window.location.href = '../../index.html';
+            // Simular dados do usuário (em produção viriam do backend)
+            const usuarioData = {
+                nome: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+                email: email,
+                telefone: '(11) 98765-4321',
+                cpf: '123.456.789-00',
+                dataNascimento: '1990-01-15',
+                genero: 'masculino',
+                empresa: '',
+                cnpj: '',
+                profissao: '',
+                dataRegistro: new Date().toLocaleDateString('pt-BR')
+            };
+
+            // Salvar no sessionStorage
+            sessionStorage.setItem('usuario_logado', 'true');
+            sessionStorage.setItem('usuario_dados', JSON.stringify(usuarioData));
+
+            console.log('✓ Login realizado:', usuarioData);
+            
+            // Mostrar feedback
+            const btn = document.querySelector('button[type="submit"]');
+            btn.textContent = '✓ Entrando...';
+            btn.disabled = true;
+
+            // Redirecionar para perfil após 1 segundo
+            setTimeout(() => {
+                window.location.href = '../perfil/minha-conta.html';
+            }, 1000);
+        });
+
+        // Verificar se já está logado
+        window.addEventListener('load', function() {
+            const usuarioLogado = sessionStorage.getItem('usuario_logado');
+            if (usuarioLogado) {
+                console.log('⚠️ Usuário já está logado. Redirecionando...');
+                window.location.href = '../perfil/minha-conta.html';
+            }
         });
     </script>
 </body>

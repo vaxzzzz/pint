@@ -152,6 +152,8 @@
 
     <script src="../../js/main.js"></script>
     <script>
+        console.log('✓ Página Anunciar carregada');
+
         document.querySelector('.image-placeholder').addEventListener('click', function() {
             document.getElementById('imagem').click();
         });
@@ -159,21 +161,64 @@
         document.getElementById('adForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const dados = {
-                nome: document.getElementById('nome').value,
-                documento: document.getElementById('documento').value,
-                email: document.getElementById('email').value,
-                telefone: document.getElementById('telefone').value,
-                descricao: document.getElementById('descricao').value,
-                valores: document.getElementById('valores').value,
-                cidade: document.getElementById('cidade').value,
-                estado: document.getElementById('uf').value,
-                cep: document.getElementById('cep').value
+            // Coletar dados do formulário
+            const nomeMaquina = document.getElementById('nome').value.trim();
+            const tipoOperacao = document.querySelector('input[name="tipo"]:checked')?.value || 'Venda';
+            const valor = document.getElementById('valores').value.trim();
+            const descricao = document.getElementById('descricao').value.trim();
+            const documento = document.getElementById('documento').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
+            const estado = document.getElementById('uf').value.trim();
+            const cep = document.getElementById('cep').value.trim();
+
+            // Validar campos obrigatórios
+            if (!nomeMaquina || !valor || !descricao) {
+                alert('❌ Preencha todos os campos obrigatórios!');
+                return;
+            }
+
+            // Criar objeto do anúncio
+            const novoAnuncio = {
+                id: new Date().getTime(),
+                nomeMaquina: nomeMaquina,
+                tipoOperacao: tipoOperacao,
+                valor: valor,
+                descricao: descricao,
+                documento: documento,
+                email: email,
+                telefone: telefone,
+                cidade: cidade,
+                estado: estado,
+                cep: cep,
+                dataAnuncio: new Date().toLocaleString('pt-BR'),
+                status: 'ativo'
             };
 
-            console.log('Dados do anúncio:', dados);
-            alert('✓ Anúncio enviado com sucesso! Será revisado em breve.');
-            window.location.href = 'pagina-meus-anuncios.html';
+            try {
+                // Carregar anúncios existentes
+                let anuncios = JSON.parse(localStorage.getItem('meus_anuncios_maquinasmax')) || [];
+                
+                // Adicionar novo anúncio
+                anuncios.push(novoAnuncio);
+                
+                // Salvar no localStorage
+                localStorage.setItem('meus_anuncios_maquinasmax', JSON.stringify(anuncios));
+
+                console.log('✓ Anúncio criado:', novoAnuncio);
+                console.log('✓ Total de anúncios:', anuncios.length);
+
+                // Feedback
+                alert('✅ Anúncio criado com sucesso!\n\nNúmero do anúncio: ' + novoAnuncio.id + '\n\nVocê será redirecionado para seus anúncios.');
+                
+                // Redirecionar
+                window.location.href = 'pagina-meus-anuncios.html';
+
+            } catch (error) {
+                console.error('❌ Erro ao criar anúncio:', error);
+                alert('❌ Erro ao criar anúncio. Tente novamente.');
+            }
         });
 
         // Aplicar máscaras
