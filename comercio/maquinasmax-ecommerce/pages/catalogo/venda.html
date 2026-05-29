@@ -85,17 +85,96 @@
 
     <script src="../../js/main.js"></script>
     <script>
+        // ===== BANCO DE DADOS DE PRODUTOS =====
+        const PRODUTOS = [
+            {
+                id: 1,
+                nome: 'Betoneira Toyama 400L',
+                vendedor: 'João Silva',
+                preco: 'R$ 8.500',
+                descricao: 'Betoneira de alta capacidade com motor resistente. Ideal para construções em grande escala.',
+                tipo: 'Venda',
+                imagem: 'https://via.placeholder.com/600x450?text=Betoneira+Toyama'
+            },
+            {
+                id: 2,
+                nome: 'Trator JD 5078E',
+                vendedor: 'Maria Santos',
+                preco: 'R$ 1.000 /dia',
+                descricao: 'Trator de grande potência com transmissão sincrônica. Perfeito para trabalhos agrícolas pesados.',
+                tipo: 'Aluguel',
+                imagem: 'https://via.placeholder.com/600x450?text=Trator+JD+5078E'
+            },
+            {
+                id: 3,
+                nome: 'Escavadeira CAT 320',
+                vendedor: 'Carlos Mecânica',
+                preco: 'R$ 850.000',
+                descricao: 'Esta é uma máquina de alta qualidade, perfeitamente mantida e pronta para trabalhar. Conta com revisão completa e está em excelente estado de funcionamento. Ideal para projetos de grande porte e obras com demanda contínua.',
+                tipo: 'Venda',
+                imagem: 'https://via.placeholder.com/600x450?text=Escavadeira+CAT+320'
+            },
+            {
+                id: 4,
+                nome: 'Guindaste Liebherr LTM',
+                vendedor: 'Pedro Construtora',
+                preco: 'R$ 5.000 /dia',
+                descricao: 'Guindaste de grande alcance com capacidade de 500 toneladas. Equipado com tecnologia de ponta.',
+                tipo: 'Aluguel',
+                imagem: 'https://via.placeholder.com/600x450?text=Guindaste+Liebherr'
+            },
+            {
+                id: 5,
+                nome: 'Retroescavadeira Case 580N',
+                vendedor: 'Ana Máquinas',
+                preco: 'R$ 180.000',
+                descricao: 'Retroescavadeira versátil com implementos adicionais. Excelente para obra civil e manutenção.',
+                tipo: 'Venda',
+                imagem: 'https://via.placeholder.com/600x450?text=Retroescavadeira+Case'
+            },
+            {
+                id: 6,
+                nome: 'Compactador Betoneira MB 2428',
+                vendedor: 'Roberto Equipamentos',
+                preco: 'R$ 2.500 /dia',
+                descricao: 'Compactador vibratório de alta frequência. Compacta asfalto e concreto com eficiência máxima.',
+                tipo: 'Aluguel',
+                imagem: 'https://via.placeholder.com/600x450?text=Compactador+MB'
+            }
+        ];
+
         // ===== INICIALIZAÇÃO =====
         console.log('✓ Página de Produto carregada');
 
-        // Obter informações do produto
+        // Obter ID da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const produtoId = parseInt(urlParams.get('id')) || 1;
+
+        // Buscar produto no banco
+        const produtoData = PRODUTOS.find(p => p.id === produtoId) || PRODUTOS[0];
+
+        console.log('📦 Produto selecionado:', produtoData);
+
+        // Atualizar elementos da página
+        document.getElementById('nome-produto').textContent = produtoData.nome;
+        document.getElementById('vendedor-produto').textContent = 'Vendedor: ' + produtoData.vendedor;
+        document.getElementById('preco-produto').textContent = produtoData.preco;
+        document.getElementById('tipo-produto').textContent = produtoData.tipo;
+        document.getElementById('desc-produto').textContent = produtoData.descricao;
+        document.querySelector('.detalhe-esquerda img').src = produtoData.imagem;
+        document.querySelector('.detalhe-esquerda img').alt = produtoData.nome;
+
+        // Atualizar título da página
+        document.title = produtoData.nome + ' - MáquinasMax';
+
+        // Obter informações do produto para o carrinho
         const produtoInfo = {
-            nome: document.getElementById('nome-produto')?.textContent.trim() || 'Produto',
-            preco: document.getElementById('preco-produto')?.textContent.trim() || 'N/A',
-            vendedor: document.getElementById('vendedor-produto')?.textContent.replace('Vendedor: ', '').trim() || 'Vendedor',
-            descricao: document.getElementById('desc-produto')?.textContent.trim() || 'Sem descrição',
+            nome: produtoData.nome,
+            preco: produtoData.preco,
+            vendedor: produtoData.vendedor,
+            descricao: produtoData.descricao,
             url: window.location.href,
-            id: new Date().getTime()
+            id: produtoData.id
         };
 
         console.log('📦 Produto Info:', produtoInfo);
